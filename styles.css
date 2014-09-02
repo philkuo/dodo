@@ -1,0 +1,11 @@
+﻿* {
+    box-sizing: border-box;
+    vertical-align: middle;
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
