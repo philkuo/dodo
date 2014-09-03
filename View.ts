@@ -42,6 +42,7 @@
             discardDiv.appendChild(cardDiv);
         });
 
+        // "draw card" button
         drawButton.href = "javascript:;";
         drawButton.innerHTML = "Draw a card";
         drawButton.onclick = function drawButtonOnClick() {
@@ -49,6 +50,7 @@
             View.RenderAll();
         };
 
+        // put all the created elements onto the page
         View.playSpaceElem.innerHTML = "";
         View.playSpaceElem.appendChild(drawButton);
         View.playSpaceElem.appendChild(handDiv);
