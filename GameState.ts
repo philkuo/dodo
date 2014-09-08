@@ -24,7 +24,23 @@
 
     //*** end setup funcs
 
+    temp(): void {
+        var copperPile: Pile = new Pile(Copper, 7);
+        var estatePile: Pile = new Pile(Estate, 3);
 
+        this.players.forEach(function foreachPlayer(player: Player): void {
+            player.deck.push(copperPile.getCard());
+            player.deck.push(copperPile.getCard());
+            player.deck.push(copperPile.getCard());
+            player.deck.push(copperPile.getCard());
+            player.deck.push(copperPile.getCard());
+            player.deck.push(copperPile.getCard());
+            player.deck.push(copperPile.getCard());
+            player.deck.push(estatePile.getCard());
+            player.deck.push(estatePile.getCard());
+            player.deck.push(estatePile.getCard());
+        });
+    }
 
     //***** Private helper functions
     private _insureReady() {

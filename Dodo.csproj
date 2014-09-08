@@ -20,13 +20,16 @@
   <ItemGroup>
     <Content Include="styles.css" />
     <Content Include="index.html" />
-    <Content Include="web.config" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="Cards.ts" />
     <TypeScriptCompile Include="GameState.ts" />
     <TypeScriptCompile Include="Main.ts" />
+    <TypeScriptCompile Include="Pile.ts" />
     <TypeScriptCompile Include="Player.ts" />
     <TypeScriptCompile Include="Utility.ts" />
     <TypeScriptCompile Include="View.ts" />

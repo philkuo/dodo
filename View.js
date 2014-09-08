@@ -2,65 +2,114 @@
     function View() {
     }
     View.RenderAll = function () {
+        Utility.Message("View.RenderAll() called.");
         View._insureReady();
 
-        Utility.Message("View.RenderAll() called.");
+        View._player = View.gameState.players[0];
 
-        var handDiv = document.createElement("div");
-        var deckDiv = document.createElement("div");
-        var discardDiv = document.createElement("div");
-        var drawButton = document.createElement("a");
+        View.root.style.whiteSpace = "nowrap";
 
-        var player = View.gameState.players[0];
+        var playerSpaceDiv = document.createElement("div");
+        var kingdomDiv = document.createElement("div");
 
-        // render player's hand
-        player.hand.forEach(function foreachPlayerHandCard(card) {
-            var cardLink = document.createElement("a");
-            cardLink.style.display = "block";
-            cardLink.innerHTML = card.name;
-            cardLink.href = "javascript:;";
-            cardLink.onclick = function cardInHandOnClick() {
-                Utility.RemoveCard(card, player.hand);
-                player.discard.push(card);
-                View.RenderAll();
-            };
-            handDiv.appendChild(cardLink);
-        });
+        playerSpaceDiv.style.width = "500px";
+        playerSpaceDiv.style.display = "inline-block";
+        playerSpaceDiv.style.backgroundColor = "#ddd";
+        View._renderPlayerSpace(playerSpaceDiv);
 
-        // render player's deck
-        var deckDivString = "Deck (" + player.deck.length + "): ";
-        for (var i = 0; i < player.deck.length; i++)
-            deckDivString += "|";
-        deckDiv.innerHTML = deckDivString;
+        kingdomDiv.style.width = "500px";
+        kingdomDiv.style.display = "inline-block";
+        kingdomDiv.style.backgroundColor = "#ddd";
+        kingdomDiv.style.marginLeft = "10px";
+        kingdomDiv.innerHTML = "kingdom stuff";
 
-        // render player's discard
-        player.discard.forEach(function foreachPlayerDiscardCard(card) {
-            var cardDiv = document.createElement("div");
-            cardDiv.innerHTML = card.name;
-            discardDiv.appendChild(cardDiv);
-        });
-
-        // "draw card" button
-        drawButton.href = "javascript:;";
-        drawButton.innerHTML = "Draw a card";
-        drawButton.onclick = function drawButtonOnClick() {
-            player.drawCards(1);
-            View.RenderAll();
-        };
-
-        // put all the created elements onto the page
-        View.playSpaceElem.innerHTML = "";
-        View.playSpaceElem.appendChild(drawButton);
-        View.playSpaceElem.appendChild(handDiv);
-        View.playSpaceElem.appendChild(deckDiv);
-        View.playSpaceElem.appendChild(discardDiv);
+        View.root.innerHTML = "";
+        View.root.appendChild(playerSpaceDiv);
+        View.root.appendChild(kingdomDiv);
     };
 
     View._insureReady = function () {
         if (!View.gameState)
             throw new Error("View.gameState is not initialized.");
-        if (!View.playSpaceElem)
+        if (!View.root)
             throw new Error("View.playSpaceElem is not initialized.");
+    };
+
+    // ***** Render methods
+    View._renderPlayerSpace = function (playerSpaceDiv) {
+        var handDiv = document.createElement("div");
+        var deckDiv = document.createElement("div");
+        var discardDiv = document.createElement("div");
+        var drawButton = document.createElement("a");
+
+        // "draw card" button, todo: temp debug
+        drawButton.href = "javascript:;";
+        drawButton.innerHTML = "Draw a card";
+        drawButton.onclick = function drawButtonOnClick() {
+            View._player.drawCards(1);
+            View.RenderAll();
+        };
+
+        View._renderPlayerHand(handDiv);
+        View._renderPlayerDeck(deckDiv);
+        View._renderPlayerDiscard(discardDiv);
+
+        playerSpaceDiv.appendChild(drawButton);
+        playerSpaceDiv.appendChild(document.createElement("hr"));
+        playerSpaceDiv.appendChild(handDiv);
+        playerSpaceDiv.appendChild(document.createElement("hr"));
+        playerSpaceDiv.appendChild(deckDiv);
+        playerSpaceDiv.appendChild(document.createElement("hr"));
+        playerSpaceDiv.appendChild(discardDiv);
+    };
+
+    View._renderPlayerHand = function (handDiv) {
+        View._player.hand.forEach(function foreachPlayerHandCard(card) {
+            handDiv.appendChild(View._makeCard(card, true, function cardInHandOnClick() {
+                Utility.RemoveCard(card, View._player.hand);
+                View._player.discard.push(card);
+                View.RenderAll();
+            }));
+        });
+    };
+    View._renderPlayerDeck = function (deckDiv) {
+        var deckDivString = "Deck (" + View._player.deck.length + "): ";
+        for (var i = 0; i < View._player.deck.length; i++)
+            deckDivString += "|";
+        deckDiv.innerHTML = deckDivString;
+    };
+    View._renderPlayerDiscard = function (discardDiv) {
+        View._player.discard.forEach(function foreachPlayerDiscardCard(card) {
+            var cardDiv = document.createElement("div");
+            cardDiv.innerHTML = card.name;
+            discardDiv.appendChild(cardDiv);
+        });
+    };
+
+    // ***** Utility
+    View._makeCard = function (card, clickable, clickAction) {
+        var cardRoot;
+        if (clickable) {
+            var cardLink = document.createElement("a");
+            cardLink.href = "javascript:;";
+            cardRoot = cardLink;
+        } else
+            cardRoot = document.createElement("div");
+
+        var cardName = document.createElement("span");
+
+        cardRoot.className = "card";
+        if (clickable) {
+            cardRoot.onclick = function cardOnClick() {
+                clickAction(View.gameState);
+            };
+        }
+
+        cardName.innerHTML = card.name;
+
+        cardRoot.appendChild(cardName);
+
+        return cardRoot;
     };
     return View;
 })();

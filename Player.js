@@ -1,20 +1,10 @@
 ﻿var Player = (function () {
     function Player(name) {
         this.name = name;
-        //name: string;
+        //name: string; //implicitly declared in ctor
         this.hand = new Array();
         this.discard = new Array();
         this.deck = new Array();
-        this.deck.push(new Estate());
-        this.deck.push(new Estate());
-        this.deck.push(new Estate());
-        this.deck.push(new Copper());
-        this.deck.push(new Copper());
-        this.deck.push(new Copper());
-        this.deck.push(new Copper());
-        this.deck.push(new Copper());
-        this.deck.push(new Copper());
-        this.deck.push(new Copper());
     }
     // ***** Public functions
     Player.prototype.drawCards = function (n) {

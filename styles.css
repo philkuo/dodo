@@ -9,3 +9,11 @@ body {
     font-family: 'Segoe UI', sans-serif;
 }
 
+.card {
+    display: inline-block;
+    text-decoration: none;
+    border-width: 1px;
+    border-style: solid;
+    padding: 5px;
+    margin: 5px;
+}

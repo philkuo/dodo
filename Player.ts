@@ -1,14 +1,11 @@
 ﻿class Player {
 
-    //name: string;
+    //name: string; //implicitly declared in ctor
     hand: Array<Card> = new Array();
     discard: Array<Card> = new Array();
     deck: Array<Card> = new Array();
 
     constructor(public name: string) {
-        this.deck.push(new Estate()); this.deck.push(new Estate()); this.deck.push(new Estate());
-        this.deck.push(new Copper()); this.deck.push(new Copper()); this.deck.push(new Copper());
-        this.deck.push(new Copper()); this.deck.push(new Copper()); this.deck.push(new Copper()); this.deck.push(new Copper());
     }
 
     // ***** Public functions
