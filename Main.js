@@ -7,6 +7,7 @@
     gameState.temp();
 
     thisPlayer = gameState.players[0];
+    gameState.currentPlayer = thisPlayer;
 
     View.gameState = gameState;
     View.root = document.getElementById("playSpace");

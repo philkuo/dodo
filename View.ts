@@ -44,8 +44,9 @@
         var handDiv: HTMLElement = document.createElement("div");
         var deckDiv: HTMLElement = document.createElement("div");
         var discardDiv: HTMLElement = document.createElement("div");
+        var numbersDiv: HTMLElement = document.createElement("div");
         var drawButton: HTMLAnchorElement = document.createElement("a");
-        
+
         // "draw card" button, todo: temp debug
         drawButton.href = "javascript:;";
         drawButton.innerHTML = "Draw a card";
@@ -57,7 +58,10 @@
         View._renderPlayerHand(handDiv);
         View._renderPlayerDeck(deckDiv);
         View._renderPlayerDiscard(discardDiv);
+        View._renderPlayerNumbers(numbersDiv);
 
+        playerSpaceDiv.appendChild(numbersDiv);
+        playerSpaceDiv.appendChild(document.createElement("hr"));
         playerSpaceDiv.appendChild(drawButton);
         playerSpaceDiv.appendChild(document.createElement("hr"));
         playerSpaceDiv.appendChild(handDiv);
@@ -70,11 +74,11 @@
     private static _renderPlayerHand(handDiv: HTMLElement) {
         View._player.hand.forEach(function foreachPlayerHandCard(card: Card): void {
             handDiv.appendChild(
-                View._makeCard(card, true, function cardInHandOnClick() {
+                View._makeCard(card, true, card.action/*function cardInHandOnClick() {
                     Utility.RemoveCard(card, View._player.hand);
                     View._player.discard.push(card);
                     View.RenderAll();
-            }));
+            }*/));
         });
     }
     private static _renderPlayerDeck(deckDiv: HTMLElement) {
@@ -90,7 +94,9 @@
             discardDiv.appendChild(cardDiv);
         });
     }
-
+    private static _renderPlayerNumbers(numbersDiv: HTMLElement) {
+        numbersDiv.innerHTML = "A: " + View._player.actionsLeft + " | $: " + View._player.coinsLeft;
+    }
     // ***** Utility
     private static _makeCard(
         card: Card,
@@ -98,9 +104,13 @@
         clickAction: (GameState) => void
     ): HTMLElement {
         var cardRoot: HTMLElement;
+
         if (clickable) {
             var cardLink: HTMLAnchorElement = document.createElement("a");
             cardLink.href = "javascript:;";
+            cardLink.onclick = function cardOnClick() {
+                clickAction(View.gameState);
+            };
             cardRoot = cardLink;
         }
         else
@@ -109,11 +119,6 @@
         var cardName: HTMLElement = document.createElement("span");
 
         cardRoot.className = "card";
-        if (clickable) {
-            cardRoot.onclick = function cardOnClick() {
-                clickAction(View.gameState);
-            } ;
-        }
 
         cardName.innerHTML = card.name;
 

@@ -5,6 +5,10 @@
         this.hand = new Array();
         this.discard = new Array();
         this.deck = new Array();
+        // how many actions the player has left this turn
+        this.actionsLeft = 0;
+        // how many coins the player has left to spend this turn
+        this.coinsLeft = 0;
     }
     // ***** Public functions
     Player.prototype.drawCards = function (n) {

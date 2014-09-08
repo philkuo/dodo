@@ -5,6 +5,11 @@
     discard: Array<Card> = new Array();
     deck: Array<Card> = new Array();
 
+    // how many actions the player has left this turn
+    actionsLeft = 0;
+    // how many coins the player has left to spend this turn
+    coinsLeft = 0;
+
     constructor(public name: string) {
     }
 

@@ -4,7 +4,12 @@
 
     id: number; // unique
     players: Array<Player> = new Array();
+    currentPlayer: Player;
 
+    cardPiles: Array<Pile> = new Array();
+    victoryPiles: Array<Pile> = new Array();
+    treasurePiles: Array<Pile> = new Array();
+    trashPile: Array<Card> = new Array();
 
     //***** Private internal properties
 

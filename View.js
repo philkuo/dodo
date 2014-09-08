@@ -40,6 +40,7 @@
         var handDiv = document.createElement("div");
         var deckDiv = document.createElement("div");
         var discardDiv = document.createElement("div");
+        var numbersDiv = document.createElement("div");
         var drawButton = document.createElement("a");
 
         // "draw card" button, todo: temp debug
@@ -53,7 +54,10 @@
         View._renderPlayerHand(handDiv);
         View._renderPlayerDeck(deckDiv);
         View._renderPlayerDiscard(discardDiv);
+        View._renderPlayerNumbers(numbersDiv);
 
+        playerSpaceDiv.appendChild(numbersDiv);
+        playerSpaceDiv.appendChild(document.createElement("hr"));
         playerSpaceDiv.appendChild(drawButton);
         playerSpaceDiv.appendChild(document.createElement("hr"));
         playerSpaceDiv.appendChild(handDiv);
@@ -65,11 +69,7 @@
 
     View._renderPlayerHand = function (handDiv) {
         View._player.hand.forEach(function foreachPlayerHandCard(card) {
-            handDiv.appendChild(View._makeCard(card, true, function cardInHandOnClick() {
-                Utility.RemoveCard(card, View._player.hand);
-                View._player.discard.push(card);
-                View.RenderAll();
-            }));
+            handDiv.appendChild(View._makeCard(card, true, card.action));
         });
     };
     View._renderPlayerDeck = function (deckDiv) {
@@ -85,13 +85,20 @@
             discardDiv.appendChild(cardDiv);
         });
     };
+    View._renderPlayerNumbers = function (numbersDiv) {
+        numbersDiv.innerHTML = "A: " + View._player.actionsLeft + " | $: " + View._player.coinsLeft;
+    };
 
     // ***** Utility
     View._makeCard = function (card, clickable, clickAction) {
         var cardRoot;
+
         if (clickable) {
             var cardLink = document.createElement("a");
             cardLink.href = "javascript:;";
+            cardLink.onclick = function cardOnClick() {
+                clickAction(View.gameState);
+            };
             cardRoot = cardLink;
         } else
             cardRoot = document.createElement("div");
@@ -99,11 +106,6 @@
         var cardName = document.createElement("span");
 
         cardRoot.className = "card";
-        if (clickable) {
-            cardRoot.onclick = function cardOnClick() {
-                clickAction(View.gameState);
-            };
-        }
 
         cardName.innerHTML = card.name;
 

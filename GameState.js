@@ -1,6 +1,10 @@
 ﻿var GameState = (function () {
     function GameState() {
         this.players = new Array();
+        this.cardPiles = new Array();
+        this.victoryPiles = new Array();
+        this.treasurePiles = new Array();
+        this.trashPile = new Array();
         //***** Private internal properties
         this._ready = false;
     }
