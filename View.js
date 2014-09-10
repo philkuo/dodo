@@ -92,8 +92,8 @@
     View._renderKingdomSpace = function (kingdomDiv) {
         View.gameState.cardPiles.forEach(function renderEachCardPile(pile) {
             var pileCard = pile.peek();
-            var pileDisabled = (View._player.coinsLeft >= pileCard.cost) && pile.notEmpty();
-            kingdomDiv.appendChild(View._makeCard(pileCard, pileDisabled, pileDisabled, function buyCardTodo() {
+            var pileDisabled = (View._player.coinsLeft < pileCard.cost) || pile.isEmpty();
+            kingdomDiv.appendChild(View._makeCard(pileCard, pileDisabled, !pileDisabled, function buyCardTodo() {
                 View._player.coinsLeft -= pileCard.cost;
                 View._player.discard.push(pile.getCard());
                 View.RenderAll();
@@ -118,6 +118,8 @@
         var cardName = document.createElement("span");
 
         cardRoot.className = "card";
+        if (disabled)
+            cardRoot.className += " disabled";
 
         cardName.innerHTML = card.name;
 

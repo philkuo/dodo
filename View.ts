@@ -101,12 +101,12 @@
     private static _renderKingdomSpace(kingdomDiv: HTMLElement) {
         View.gameState.cardPiles.forEach(function renderEachCardPile(pile: Pile) {
             var pileCard: Card = pile.peek();
-            var pileDisabled: boolean = (View._player.coinsLeft >= pileCard.cost) && pile.notEmpty(); // player can afford and pile has cards left
+            var pileDisabled: boolean = (View._player.coinsLeft < pileCard.cost) || pile.isEmpty(); // player can't afford or pile is empty
             kingdomDiv.appendChild(
                 View._makeCard(
                     pileCard,
                     pileDisabled, // disabled
-                    pileDisabled, // clickable
+                    !pileDisabled, // clickable
                     function buyCardTodo() {
                         View._player.coinsLeft -= pileCard.cost;
                         View._player.discard.push(pile.getCard());
@@ -120,9 +120,9 @@
     // ***** Utility
     private static _makeCard(
         card: Card,
-        disabled: boolean, // whether to gray it out or not
+        disabled: boolean, // gray the card out
         clickable: boolean,
-        clickAction: (GameState) => void
+        clickAction: (GameState) => void // click action only attached if clickable is true
     ): HTMLElement {
         var cardRoot: HTMLElement;
 
@@ -140,6 +140,8 @@
         var cardName: HTMLElement = document.createElement("span");
 
         cardRoot.className = "card";
+        if (disabled)
+            cardRoot.className += " disabled";
 
         cardName.innerHTML = card.name;
 
