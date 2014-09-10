@@ -6,7 +6,7 @@
     private static _player: Player;
 
     static RenderAll() {
-        Utility.Message("View.RenderAll() called.");
+        Utilities.Message("View.RenderAll() called.");
         View._insureReady();
 
         View._player = View.gameState.players[0];
@@ -25,7 +25,7 @@
         kingdomDiv.style.display = "inline-block";
         kingdomDiv.style.backgroundColor = "#ddd";
         kingdomDiv.style.marginLeft = "10px";
-        kingdomDiv.innerHTML = "kingdom stuff";
+        View._renderKingdomSpace(kingdomDiv);
 
         View.root.innerHTML = "";
         View.root.appendChild(playerSpaceDiv);
@@ -74,7 +74,7 @@
     private static _renderPlayerHand(handDiv: HTMLElement) {
         View._player.hand.forEach(function foreachPlayerHandCard(card: Card): void {
             handDiv.appendChild(
-                View._makeCard(card, true, card.action/*function cardInHandOnClick() {
+                View._makeCard(card, false, true, card.action/*function cardInHandOnClick() {
                     Utility.RemoveCard(card, View._player.hand);
                     View._player.discard.push(card);
                     View.RenderAll();
@@ -97,9 +97,30 @@
     private static _renderPlayerNumbers(numbersDiv: HTMLElement) {
         numbersDiv.innerHTML = "A: " + View._player.actionsLeft + " | $: " + View._player.coinsLeft;
     }
+
+    private static _renderKingdomSpace(kingdomDiv: HTMLElement) {
+        View.gameState.cardPiles.forEach(function renderEachCardPile(pile: Pile) {
+            var pileCard: Card = pile.peek();
+            var pileDisabled: boolean = (View._player.coinsLeft >= pileCard.cost) && pile.notEmpty(); // player can afford and pile has cards left
+            kingdomDiv.appendChild(
+                View._makeCard(
+                    pileCard,
+                    pileDisabled, // disabled
+                    pileDisabled, // clickable
+                    function buyCardTodo() {
+                        View._player.coinsLeft -= pileCard.cost;
+                        View._player.discard.push(pile.getCard());
+                        View.RenderAll();
+                    }
+                )
+            );
+        });
+    }
+
     // ***** Utility
     private static _makeCard(
         card: Card,
+        disabled: boolean, // whether to gray it out or not
         clickable: boolean,
         clickAction: (GameState) => void
     ): HTMLElement {

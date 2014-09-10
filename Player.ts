@@ -29,11 +29,11 @@
         }
 
         if (this.deck.length == 0) {
-            Utility.Message("No cards left to draw!");
+            Utilities.Message("No cards left to draw!");
             return false;
         }
 
-        this.hand.push(Utility.DrawRandomCard(this.deck));
+        this.hand.push(Utilities.DrawRandomCard(this.deck));
 
         return true;
     }

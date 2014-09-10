@@ -31,7 +31,7 @@
     <TypeScriptCompile Include="Main.ts" />
     <TypeScriptCompile Include="Pile.ts" />
     <TypeScriptCompile Include="Player.ts" />
-    <TypeScriptCompile Include="Utility.ts" />
+    <TypeScriptCompile Include="Utilities.ts" />
     <TypeScriptCompile Include="View.ts" />
   </ItemGroup>
   <ItemGroup>

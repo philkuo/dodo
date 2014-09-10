@@ -56,6 +56,10 @@ var Card = (function () {
             //return this._action;
             return function (gameState) {
                 gameState.currentPlayer.coinsLeft += _this.coin;
+                var cardIndex = gameState.currentPlayer.hand.indexOf(_this);
+                if (cardIndex <= -1)
+                    throw new Error("The card to discard was not found in the player's hand.");
+                gameState.currentPlayer.discard.push(gameState.currentPlayer.hand.splice(cardIndex, 1)[0]);
                 View.RenderAll();
             };
         },
@@ -65,80 +69,90 @@ var Card = (function () {
     return Card;
 })();
 
-//***** Base cards
-var Copper = (function (_super) {
-    __extends(Copper, _super);
-    function Copper() {
-        _super.apply(this, arguments);
-        this._name = "Copper";
-        this._cost = 0;
-        this._coin = 1;
-    }
-    return Copper;
-})(Card);
-var Silver = (function (_super) {
-    __extends(Silver, _super);
-    function Silver() {
-        _super.apply(this, arguments);
-        this._name = "Silver";
-        this._cost = 3;
-        this._coin = 2;
-    }
-    return Silver;
-})(Card);
-var Gold = (function (_super) {
-    __extends(Gold, _super);
-    function Gold() {
-        _super.apply(this, arguments);
-        this._name = "Gold";
-        this._cost = 6;
-        this._coin = 3;
-    }
-    return Gold;
-})(Card);
-var Estate = (function (_super) {
-    __extends(Estate, _super);
-    function Estate() {
-        _super.apply(this, arguments);
-        this._name = "Estate";
-        this._cost = 2;
-        this._points = 1;
-    }
-    return Estate;
-})(Card);
-var Duchy = (function (_super) {
-    __extends(Duchy, _super);
-    function Duchy() {
-        _super.apply(this, arguments);
-        this._name = "Duchy";
-        this._cost = 5;
-        this._points = 3;
-    }
-    return Duchy;
-})(Card);
-var Province = (function (_super) {
-    __extends(Province, _super);
-    function Province() {
-        _super.apply(this, arguments);
-        this._name = "Province";
-        this._cost = 8;
-        this._points = 6;
-    }
-    return Province;
-})(Card);
+var Cards;
+(function (Cards) {
+    //***** Basic cards
+    var Copper = (function (_super) {
+        __extends(Copper, _super);
+        function Copper() {
+            _super.apply(this, arguments);
+            this._name = "Copper";
+            this._cost = 0;
+            this._coin = 1;
+        }
+        return Copper;
+    })(Card);
+    Cards.Copper = Copper;
+    var Silver = (function (_super) {
+        __extends(Silver, _super);
+        function Silver() {
+            _super.apply(this, arguments);
+            this._name = "Silver";
+            this._cost = 3;
+            this._coin = 2;
+        }
+        return Silver;
+    })(Card);
+    Cards.Silver = Silver;
+    var Gold = (function (_super) {
+        __extends(Gold, _super);
+        function Gold() {
+            _super.apply(this, arguments);
+            this._name = "Gold";
+            this._cost = 6;
+            this._coin = 3;
+        }
+        return Gold;
+    })(Card);
+    Cards.Gold = Gold;
+    var Estate = (function (_super) {
+        __extends(Estate, _super);
+        function Estate() {
+            _super.apply(this, arguments);
+            this._name = "Estate";
+            this._cost = 2;
+            this._points = 1;
+        }
+        return Estate;
+    })(Card);
+    Cards.Estate = Estate;
+    var Duchy = (function (_super) {
+        __extends(Duchy, _super);
+        function Duchy() {
+            _super.apply(this, arguments);
+            this._name = "Duchy";
+            this._cost = 5;
+            this._points = 3;
+        }
+        return Duchy;
+    })(Card);
+    Cards.Duchy = Duchy;
+    var Province = (function (_super) {
+        __extends(Province, _super);
+        function Province() {
+            _super.apply(this, arguments);
+            this._name = "Province";
+            this._cost = 8;
+            this._points = 6;
+        }
+        return Province;
+    })(Card);
+    Cards.Province = Province;
 
-// ***** Base Set
-var Village = (function (_super) {
-    __extends(Village, _super);
-    function Village() {
-        _super.apply(this, arguments);
-        this._name = "Village";
-        this._cost = 3;
-        this._action = function VillageAction(gameState) {
-            gameState.currentPlayer.actionsLeft += 2;
-            gameState.currentPlayer.drawCards(1);
-        };
-    }
-    return Village;
-})(Card);
+    // ***** Base Set
+    var Village = (function (_super) {
+        __extends(Village, _super);
+        function Village() {
+            _super.apply(this, arguments);
+            this._name = "Village";
+            this._cost = 3;
+            this._action = function VillageAction(gameState) {
+                gameState.currentPlayer.actionsLeft += 2;
+                gameState.currentPlayer.drawCards(1);
+            };
+        }
+        return Village;
+    })(Card);
+    Cards.Village = Village;
+})(Cards || (Cards = {}));
 //# sourceMappingURL=Cards.js.map

@@ -4,7 +4,7 @@
 
     gameState = new GameState();
     gameState.players.push(new Player("dodo player"));
-    gameState.temp();
+    gameState.setupBasicCards();
 
     thisPlayer = gameState.players[0];
     gameState.currentPlayer = thisPlayer;

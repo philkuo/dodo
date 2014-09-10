@@ -2,7 +2,7 @@
     function View() {
     }
     View.RenderAll = function () {
-        Utility.Message("View.RenderAll() called.");
+        Utilities.Message("View.RenderAll() called.");
         View._insureReady();
 
         View._player = View.gameState.players[0];
@@ -21,7 +21,7 @@
         kingdomDiv.style.display = "inline-block";
         kingdomDiv.style.backgroundColor = "#ddd";
         kingdomDiv.style.marginLeft = "10px";
-        kingdomDiv.innerHTML = "kingdom stuff";
+        View._renderKingdomSpace(kingdomDiv);
 
         View.root.innerHTML = "";
         View.root.appendChild(playerSpaceDiv);
@@ -69,7 +69,7 @@
 
     View._renderPlayerHand = function (handDiv) {
         View._player.hand.forEach(function foreachPlayerHandCard(card) {
-            handDiv.appendChild(View._makeCard(card, true, card.action));
+            handDiv.appendChild(View._makeCard(card, false, true, card.action));
         });
     };
     View._renderPlayerDeck = function (deckDiv) {
@@ -89,8 +89,20 @@
         numbersDiv.innerHTML = "A: " + View._player.actionsLeft + " | $: " + View._player.coinsLeft;
     };
 
+    View._renderKingdomSpace = function (kingdomDiv) {
+        View.gameState.cardPiles.forEach(function renderEachCardPile(pile) {
+            var pileCard = pile.peek();
+            var pileDisabled = (View._player.coinsLeft >= pileCard.cost) && pile.notEmpty();
+            kingdomDiv.appendChild(View._makeCard(pileCard, pileDisabled, pileDisabled, function buyCardTodo() {
+                View._player.coinsLeft -= pileCard.cost;
+                View._player.discard.push(pile.getCard());
+                View.RenderAll();
+            }));
+        });
+    };
+
     // ***** Utility
-    View._makeCard = function (card, clickable, clickAction) {
+    View._makeCard = function (card, disabled, clickable, clickAction) {
         var cardRoot;
 
         if (clickable) {
